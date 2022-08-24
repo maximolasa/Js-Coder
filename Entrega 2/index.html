@@ -12,6 +12,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous">
     </script>
+    <script defer src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script defer src="js/index.js"></script>
     <title>Tienda</title>
@@ -34,6 +35,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Cantidad</th>
+                                <th scope="col">Precio</th>
                                 <th scope="col">Total</th>
                             </tr>
                         </thead>
@@ -50,7 +52,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Terminar compra</button>
+                <button type="button" class="btn btn-primary" id="terminar">Terminar compra</button>
             </div>
         </div>
     </div>
@@ -102,11 +104,11 @@
 
 
 
-    <main>
+    <main class="container-fluid ">
 
-        <!-- Cambiar d-flex para ordenar cartas -->
-        <div id="contenedor--productos">
-            <div id="cartas" class="d-flex mt-4 justify-content-around"></div>
+
+        <div id="contenedor--productos " class="m-2 ">
+            <div id="cartas" class="row p-5" ></div>
         </div>
 
 

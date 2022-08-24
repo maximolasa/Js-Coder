@@ -8,7 +8,7 @@ class ElementoCarrito {
 }
 
 class Producto {
-    constructor(id, nombre, precio, foto,) {
+    constructor(id, nombre, precio, foto, ) {
         this.id = id
         this.nombre = nombre
         this.precio = precio
@@ -21,7 +21,7 @@ const productos = [];
 const elementosCarrito = [];
 const contenedorProductos = document.getElementById('contenedor--productos');
 const contenedorCarritoCompras = document.querySelector("#items")
-
+const contenedorFooterCarrito = document.querySelector("#footer")
 
 //cargo los productos y carrito
 cargarProductos();
@@ -31,82 +31,164 @@ dibujarCarrito();
 
 //declaro los productos
 function cargarProductos() {
-    productos.push(new Producto(001,"Rtx-3060","$80000", "./dasdsadsa.jpg"));
-    productos.push(new Producto(002,"Rtx-3070", "$90000" , "./dasdsadsa.jpg"));
-    productos.push(new Producto(003, "Rtx-3080", "$100000", "./dasdsadsa.jpg"));
-    productos.push(new Producto(004, "Rtx-3090","$ 110000", "./dasdsadsa.jpg"));
-    
+    productos.push(new Producto(001, "Rtx-2060", 60500, "./dasdsadsa.jpg"));
+    productos.push(new Producto(002, "Rtx-2080", 68300, "./dasdsadsa.jpg"));
+    productos.push(new Producto(003, "Rtx-3060", 70000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(004, "Rtx-3060 ti", 760000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(005, "Rtx-3070", 832500, "./dasdsadsa.jpg"));
+    productos.push(new Producto(006, "Rtx-3070 ti", 90000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(007, "Rtx-3080", 93000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(008, "Rtx-3080 ti", 10000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(009, "Rtx-3090", 105000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(0010, "Rtx-3090 ti", 110000, "./dasdsadsa.jpg"));
+   
 
 }
 
 
+//eliminar
+
+function removerProductoCarrito(elementoAEliminar) {
+    const elementosAMantener = elementosCarrito.filter((elemento) => elementoAEliminar.producto.id != elemento.producto.id);
+    elementosCarrito.length = 0;
+
+    elementosAMantener.forEach((elemento) => elementosCarrito.push(elemento));
+}
+
+
+
+
+
+
 //Ejemplo cargando un producto para ver si funciona
-function cargarCarrito(){
+function cargarCarrito() {
     let elementoCarrito = new ElementoCarrito(
-        new Producto(001,"Rtx-3060","80000", "./dasdsadsa.jpg"),
-         1
+       
     )
-    elementosCarrito.push(elementoCarrito);
+
 }
 
 //creacion del interior del carrito ya creado en html (modal)
 function dibujarCarrito() {
     let renglonesCarrito = '';
 
+    let sumaCarrito = 0;
+
     elementosCarrito.forEach(
         (elemento) => {
-            renglonesCarrito+=`
+            renglonesCarrito += `
                 <tr>
                     <td>${elemento.producto.id}</td>
                     <td>${elemento.producto.nombre}</td>
-                    <td>${elemento.cantidad}</td>
-                    <td>$ ${elemento.producto.precio}</td>
+                    <td><input id="cantidad-producto-${elemento.producto.id}" type="number" value="${elemento.cantidad}" min="1" max="1000" step="1" style="width: 50px;"/></td>
+                    <td>${elemento.producto.precio}</td>
+                    <td>$ ${elemento.producto.precio*elemento.cantidad}</td>
+                    <td><button id="eliminar-producto-${elemento.producto.id}" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></td>
                 </tr>
             `;
+            contenedorCarritoCompras.innerHTML = renglonesCarrito;
+
+            sumaCarrito += elemento.producto.precio * elemento.cantidad;
+
+            let inputCantidadProductos = document.getElementById(`cantidad-producto-${elemento.producto.id}`)
+
+            inputCantidadProductos.addEventListener("change", (ev) => {
+                // alert("Estoy agregando");
+                let nuevaCantidad = ev.target.value;
+                elemento.cantidad = nuevaCantidad;
+                dibujarCarrito();
+            });
+
+            let borrarProducto = document.getElementById(`eliminar-producto-${elemento.producto.id}`);
+
+            //elimina producto al click
+
+            borrarProducto.addEventListener("click", (e) => {
+                removerProductoCarrito(elemento);
+                dibujarCarrito();
+            });
+
         }
+
     );
 
-    contenedorCarritoCompras.innerHTML = renglonesCarrito;
-
+    if (elementosCarrito.length != 0) {
+        contenedorFooterCarrito.innerHTML = `
+        <th scope= "row" colspan="5"> Total de la compra: $${sumaCarrito} </th>
+        `
+    }
 }
-
-
-
 
 
 
 //Creo las carta con todos los productos previamente cargados por js 
 
 let cartas = document.getElementById("cartas");
-for(const producto of productos){
-    let carta =document.createElement("div");
-    carta.className="card col-md-2 ";
-    carta.innerHTML=`
-            <div class= "card body"> 
+for (const producto of productos) {
+    let carta = document.createElement("div");
+    carta.className = "card col-md-2 m-2 ";
+    carta.innerHTML = `
+            <div class= "card body border-0"> 
             <img src="../dasdsadsa.jpg" alt="">
-            <h5 class= "card-title"> ${producto.nombre} </h5> 
-            <p class= "card-text"> ${producto.precio} </p> 
-            <button class= "btn btn-primary " id="botonAgregar"> Comprar </p> 
+            <h5 class= "card-title "> ${producto.nombre} </h5> 
+            <p class= "card-text p-1"> $ ${producto.precio} </p> 
+            <button class= "btn btn-primary " id="botonAgregar${producto.id}"> Comprar </p> 
+            
         </div>
         
     `;
     cartas.append(carta);
+
+    let agregar = document.getElementById(`botonAgregar${producto.id}`);
+
+
+    //al click agregar 
+    agregar.onclick = () => {
+
+
+        let elementoExistente =
+            elementosCarrito.find((elemento) => elemento.producto.id == producto.id);
+
+        if (elementoExistente) {
+            elementoExistente.cantidad += 1;
+        } else {
+            let elementoCarrito = new ElementoCarrito(producto, 1);
+            elementosCarrito.push(elementoCarrito);
+        }
+
+
+
+        dibujarCarrito();
+        swal({
+            title: "¡Producto agregado!",
+            text: `${producto.nombre} agregado al carrito de compra.`,
+            icon: "success",
+            buttons: {
+                cerrar: {
+                    text: "Cerrar",
+                    value: false
+                },
+                carrito: {
+                    text: "Ir a carrito",
+                    value: true
+                }
+            }
+        }).then((irACarrito) => {
+
+            if(irACarrito) {
+                //swal("Vamos al carrito!");
+                const myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {keyboard: true});
+                const modalToggle = document.getElementById('toggleMyModal'); 
+                myModal.show(modalToggle);
+
+            }
+        });
+    }
+
 }
 
+let end = document.getElementById('terminar');
 
-
-
-//PROBLEMA
-//Solo me toma el click de la primer carta, y todo undefined. 
-//Producto con minuscula no me hace nada
-
-var agregar = document.getElementById("botonAgregar");
-
-agregar.onclick = () => {
-
-    let elementoCarrito = new ElementoCarrito(productos, 1);
-    elementosCarrito.push(elementoCarrito);
-
-    dibujarCarrito();
-
-} 
+end.onclick = () => {
+    alert("Felicidades por su compra")
+}
