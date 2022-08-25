@@ -192,3 +192,17 @@ let end = document.getElementById('terminar');
 end.onclick = () => {
     alert("Felicidades por su compra")
 }
+
+
+//Pasando a localStorage todos los productos disponibles 
+
+const productosAJSON = JSON.stringify(productos);
+localStorage.setItem("productosDisponibles", productosAJSON);
+
+
+//Traigo del storage al console.log el 
+
+let productosDelStorage = localStorage.getItem("productosDisponibles");
+console.log(productosDelStorage);
+
+
