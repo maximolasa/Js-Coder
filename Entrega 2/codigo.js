@@ -38,9 +38,9 @@ function cargarProductos() {
     productos.push(new Producto(005, "Rtx-3070", 832500, "./dasdsadsa.jpg"));
     productos.push(new Producto(006, "Rtx-3070 ti", 90000, "./dasdsadsa.jpg"));
     productos.push(new Producto(007, "Rtx-3080", 93000, "./dasdsadsa.jpg"));
-    productos.push(new Producto(008, "Rtx-3080 ti", 10000, "./dasdsadsa.jpg"));
-    productos.push(new Producto(009, "Rtx-3090", 105000, "./dasdsadsa.jpg"));
-    productos.push(new Producto(0010, "Rtx-3090 ti", 110000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(010, "Rtx-3080 ti", 10000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(011, "Rtx-3090", 105000, "./dasdsadsa.jpg"));
+    productos.push(new Producto(012, "Rtx-3090 ti", 110000, "./dasdsadsa.jpg"));
    
 
 }
@@ -70,23 +70,25 @@ function cargarCarrito() {
 
 //creacion del interior del carrito ya creado en html (modal)
 function dibujarCarrito() {
-    let renglonesCarrito = '';
 
     let sumaCarrito = 0;
 
+    contenedorCarritoCompras.innerHTML = "";
+
     elementosCarrito.forEach(
         (elemento) => {
-            renglonesCarrito += `
-                <tr>
+            let renglonesCarrito = document.createElement("tr");
+            renglonesCarrito.innerHTML = `
+                
                     <td>${elemento.producto.id}</td>
                     <td>${elemento.producto.nombre}</td>
                     <td><input id="cantidad-producto-${elemento.producto.id}" type="number" value="${elemento.cantidad}" min="1" max="1000" step="1" style="width: 50px;"/></td>
                     <td>${elemento.producto.precio}</td>
                     <td>$ ${elemento.producto.precio*elemento.cantidad}</td>
                     <td><button id="eliminar-producto-${elemento.producto.id}" type="button" class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></td>
-                </tr>
+                
             `;
-            contenedorCarritoCompras.innerHTML = renglonesCarrito;
+            contenedorCarritoCompras.append(renglonesCarrito);
 
             sumaCarrito += elemento.producto.precio * elemento.cantidad;
 
