@@ -114,11 +114,29 @@ function dibujarCarrito() {
 
     );
 
+
+    /*
     if (elementosCarrito.length != 0) {
         contenedorFooterCarrito.innerHTML = `
         <th scope= "row" colspan="5"> Total de la compra: $${sumaCarrito} </th>
         `
     }
+    else{
+        contenedorFooterCarrito.innerHTML = `
+        <th scope= "row" colspan="5">Carrito vacío - comience a comprar!  </th>
+        `
+    }
+    */
+
+    //Reemplazo el if else por OPERADOR TERNARIO 
+    elementosCarrito.length != 0 ? contenedorFooterCarrito.innerHTML = `
+    <th scope= "row" colspan="5"> Total de la compra: $${sumaCarrito} </th>
+    ` :  contenedorFooterCarrito.innerHTML = `
+    <th scope= "row" colspan="5">Carrito vacío - comience a comprar!  </th>
+    `
+
+
+
 }
 
 
@@ -152,7 +170,8 @@ for (const producto of productos) {
             elementosCarrito.find((elemento) => elemento.producto.id == producto.id);
 
         if (elementoExistente) {
-            elementoExistente.cantidad += 1;
+           // elementoExistente.cantidad += 1;
+           elementoExistente.cantidad ++;
         } else {
             let elementoCarrito = new ElementoCarrito(producto, 1);
             elementosCarrito.push(elementoCarrito);
